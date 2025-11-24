@@ -1,34 +1,60 @@
-{% extends "myapp/base.html" %}
-{% block title %}My To-Do List{% endblock %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My To-Do App</title>
+    <link rel="stylesheet" href="{% static 'myapp/css/style.css' %}">
+</head>
+<body>
 
-{% block content %}
-<form method="POST" class="task-form">
-    {% csrf_token %}
-    {{ form.task }}
-    <button type="submit">Add</button>
-</form>
+<nav>
+    <h2>My To-Do App</h2>
+</nav>
 
-<table>
-    <tr>
-        <th>#</th>
-        <th>Task</th>
-        <th>Completed</th>
-        <th>Action</th>
-    </tr>
-    {% for todo in todos %}
-    <tr class="{% if todo.completed %}completed{% endif %}">
-        <td>{{ forloop.counter }}</td>
-        <td>{{ todo.task }}</td>
-        <td>{{ todo.completed|yesno:"Yes,No" }}</td>
-        <td>
-            <a href="{% url 'toggle_task' todo.id %}">Toggle</a> | 
-            <a href="{% url 'delete_task' todo.id %}">Delete</a>
-        </td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="4" style="text-align:center;">No tasks yet!</td>
-    </tr>
-    {% endfor %}
-</table>
-{% endblock %}
+<div class="container">
+    <h1>My To-Do List</h1>
+
+    <!-- Add Task Form -->
+    <form method="POST" class="add-task-form">
+        {% csrf_token %}
+        {{ form.task }}
+        <button type="submit">Add</button>
+    </form>
+
+    <!-- Task Table -->
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Task</th>
+            <th>Actions</th>
+        </tr>
+        {% for todo in todos %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td style="{% if todo.completed %}text-decoration: line-through; color: #aaa;{% endif %}">
+                {{ todo.task }}
+            </td>
+            <td>
+                <form method="POST" action="{% url 'toggle_task' todo.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-complete">
+                        {% if todo.completed %}Undo{% else %}Complete{% endif %}
+                    </button>
+                </form>
+
+                <form method="POST" action="{% url 'delete_task' todo.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-delete">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3" style="text-align:center;">No tasks yet!</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+</body>
+</html>
