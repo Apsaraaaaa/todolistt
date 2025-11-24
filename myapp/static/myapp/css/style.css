@@ -57,10 +57,10 @@ tr:hover {
     background-color: #6c5ce7;
     color: white;
     border: none;
-    padding: 8px 14px;
+    padding: 15px 12px;
     border-radius: 6px;
     cursor: pointer;
-    margin-left: 5px;
+    margin-left: 8px;
 }
 
 .add-task-form button:hover,
@@ -70,8 +70,8 @@ tr:hover {
 }
 
 .add-task-form input[type="text"] {
-    padding: 8px;
+    padding: 10px;
     width: 70%;
-    border-radius: 6px;
+    border-radius: 2px;
     border: 1px solid #ccc;
 }
